@@ -26,8 +26,8 @@ class UserProfile(models.Model):
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     address = models.ForeignKey(Location, null=True, on_delete=models.SET_NULL)
     marital_status = models.CharField(max_length=20, choices=(('single','Single'),('in relationship','In Relationship'),('engaged','Engaged'),('married','Married')), default=('single','Single'))
-    experience = models.JSONField(default=None)
-    education = models.JSONField(default=None)
+    experience = [models.JSONField(default={"start_date": None, "end_date": None, "Role": None, "Workplace": None})]
+    education = [models.JSONField(default={"start_date": None, "end_date": None, "School": None})]
     occupation =  models.CharField(max_length=20, choices=(('student','Student'),('employed','Employed'),('self employed','Self Employed'),('unemployed','Unemployed'),('freelancer','Freelancer')))
     # social_interests = models.ManyToManyField(SocialInterest, default=None, null=True)
     # work_interests = models.ManyToManyField(WorkInterest, default=None, null=True)
