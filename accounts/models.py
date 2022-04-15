@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import BaseUserManager
 from location.models import Location
+from interest.models import Interest
 
 class User(AbstractBaseUser):
 
@@ -24,10 +25,9 @@ class User(AbstractBaseUser):
 class UserProfile(models.Model):
     id = models.BigAutoField(primary_key=True, unique=True)
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
-    address = models.ForeignKey(Location, null=True, on_delete=models.SET_NULL)
-    marital_status = models.CharField(max_length=20, choices=(('single','Single'),('in relationship','In Relationship'),('engaged','Engaged'),('married','Married')), default=('single','Single'))
-    experience = [models.JSONField(default={"start_date": None, "end_date": None, "Role": None, "Workplace": None})]
-    education = [models.JSONField(default={"start_date": None, "end_date": None, "School": None})]
+    address = models.ForeignKey(Location, null=True, blank=True, on_delete=models.SET_NULL)
+    marital_status = models.CharField(max_length=20, choices=(('single','Single'),('in relationship','In Relationship'),('engaged','Engaged'),('married','Married')), default='Single')
+    experience = models.JSONField(default=list, null=True, blank=True)
+    education = models.JSONField(default=list, null=True, blank=True)
     occupation =  models.CharField(max_length=20, choices=(('student','Student'),('employed','Employed'),('self employed','Self Employed'),('unemployed','Unemployed'),('freelancer','Freelancer')))
-    # social_interests = models.ManyToManyField(SocialInterest, default=None, null=True)
-    # work_interests = models.ManyToManyField(WorkInterest, default=None, null=True)
+    interests = models.ManyToManyField(Interest, null=True, blank=True)

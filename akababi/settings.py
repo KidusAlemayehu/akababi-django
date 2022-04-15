@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'accounts.apps.AccountsConfig',
     'location.apps.LocationConfig',
+    'interest.apps.InterestConfig',
 ]
 
 REST_FRAMEWORK = {
