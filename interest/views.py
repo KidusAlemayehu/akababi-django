@@ -7,3 +7,7 @@ from rest_framework import permissions
 class AddInterest(CreateAPIView):
 	permission_classes = (permissions.AllowAny)
 	serializer_class = InterestSerializer
+
+class ListInterest(ListAPIView):
+	permission_classes = (permissions.AllowAny)
+	serializer_class = InterestSerializer

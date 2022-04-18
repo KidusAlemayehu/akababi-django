@@ -34,3 +34,9 @@ class LoginSerializer(TokenObtainPairSerializer):
         token['name'] = user.username
 
         return token
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id','home_address','marital_status','work_address','occupation','education','experience','interests')
+        extra_kwargs = {'id':{'read_only':True},}

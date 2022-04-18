@@ -13,6 +13,12 @@ class User(AbstractBaseUser):
     password = models.CharField(max_length=350)
     gender = models.CharField(choices=[('male', 'Male'),('female', 'Female')], max_length=10)
     DOB = models.DateField()
+    address = models.ForeignKey(Location, null=True, blank=True, on_delete=models.SET_NULL)
+    marital_status = models.CharField(max_length=20, choices=(('single','Single'),('in relationship','In Relationship'),('engaged','Engaged'),('married','Married')), default='Single')
+    experience = models.JSONField(default=list, null=True, blank=True)
+    education = models.JSONField(default=list, null=True, blank=True)
+    occupation =  models.CharField(max_length=20, choices=(('student','Student'),('employed','Employed'),('self employed','Self Employed'),('unemployed','Unemployed'),('freelancer','Freelancer')))
+    interests = models.ManyToManyField(Interest, null=True, blank=True)
     date_joined = models.DateField(auto_now=True)
     is_social = models.BooleanField(default=False)
     is_work = models.BooleanField(default=False)
@@ -20,14 +26,3 @@ class User(AbstractBaseUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
     objects = BaseUserManager()
-
-
-class UserProfile(models.Model):
-    id = models.BigAutoField(primary_key=True, unique=True)
-    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
-    address = models.ForeignKey(Location, null=True, blank=True, on_delete=models.SET_NULL)
-    marital_status = models.CharField(max_length=20, choices=(('single','Single'),('in relationship','In Relationship'),('engaged','Engaged'),('married','Married')), default='Single')
-    experience = models.JSONField(default=list, null=True, blank=True)
-    education = models.JSONField(default=list, null=True, blank=True)
-    occupation =  models.CharField(max_length=20, choices=(('student','Student'),('employed','Employed'),('self employed','Self Employed'),('unemployed','Unemployed'),('freelancer','Freelancer')))
-    interests = models.ManyToManyField(Interest, null=True, blank=True)

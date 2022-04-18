@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from .serializers import LoginSerializer, RegistrationSerializer
-from rest_framework.generics import CreateAPIView
+from .serializers import LoginSerializer, RegistrationSerializer, UserProfileSerializer
+from rest_framework.generics import CreateAPIView, ListAPIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
 from rest_framework_simplejwt.views import TokenObtainPairView 
@@ -24,3 +24,9 @@ class SignUpAPIView(CreateAPIView):
 class LoginAPIView(TokenObtainPairView):
     permission_classes = (permissions.AllowAny,)
     serializer_class = LoginSerializer
+
+class UserProfileView(ListAPIView):
+    def get(self, request, id):
+        qs = User.objects.get(id=id)
+        serializer = UserProfileSerializer(qs, many=False)
+        return Response(serializer.data)
