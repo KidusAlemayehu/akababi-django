@@ -5,7 +5,6 @@ from location.models import Location
 from interest.models import Interest
 
 class User(AbstractBaseUser):
-
     id = models.BigAutoField(primary_key=True, unique=True)
     full_name = models.CharField(max_length=50)
     username = models.CharField(max_length=25, unique=True, default=None)
@@ -17,7 +16,7 @@ class User(AbstractBaseUser):
     marital_status = models.CharField(max_length=20, choices=(('single','Single'),('in relationship','In Relationship'),('engaged','Engaged'),('married','Married')), default='Single')
     experience = models.JSONField(default=list, null=True, blank=True)
     education = models.JSONField(default=list, null=True, blank=True)
-    occupation =  models.CharField(max_length=20, choices=(('student','Student'),('employed','Employed'),('self employed','Self Employed'),('unemployed','Unemployed'),('freelancer','Freelancer')))
+    occupation =  models.CharField(max_length=20, choices=(('student','Student'),('employed','Employed'),('self employed','Self Employed'),('unemployed','Unemployed'),('freelancer','Freelancer')), null=True, blank=True)
     interests = models.ManyToManyField(Interest, null=True, blank=True)
     date_joined = models.DateField(auto_now=True)
     is_social = models.BooleanField(default=False)
