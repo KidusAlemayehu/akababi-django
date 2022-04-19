@@ -19,8 +19,7 @@ class User(AbstractBaseUser):
     occupation =  models.CharField(max_length=20, choices=(('student','Student'),('employed','Employed'),('self employed','Self Employed'),('unemployed','Unemployed'),('freelancer','Freelancer')), null=True, blank=True)
     interests = models.ManyToManyField(Interest, null=True, blank=True)
     date_joined = models.DateField(auto_now=True)
-    is_social = models.BooleanField(default=False)
-    is_work = models.BooleanField(default=False)
+    user_type = models.CharField(max_length=6, choices=(('social','Social'),('work','Work'),('both','Both')), blank=True)
     last_login = models.DateTimeField(auto_now=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

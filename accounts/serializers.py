@@ -15,10 +15,9 @@ class RegistrationSerializer(serializers.ModelSerializer):
             'password',
             'gender',
             'DOB',
-            'is_social',
-            'is_work')
+            'user_type',)
         extra_kwargs = {'password': {'write_only': True},
-                        'is_social':{'write_only':True},'is_work': {'write_only': True}}
+                        'user_type':{'write_only':True}}
 
     def validate_password(self, value):
         return make_password(value)
