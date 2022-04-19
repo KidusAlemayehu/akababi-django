@@ -2,6 +2,7 @@ from .models import User
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth.hashers import make_password
+from interest.serializers import InterestSerializer
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -35,7 +36,8 @@ class LoginSerializer(TokenObtainPairSerializer):
         return token
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    interests = InterestSerializer(many=True, read_only=True)
     class Meta:
         model = User
-        fields = ('id','address','marital_status','occupation','education','experience','interests')
+        fields = ['id','address','marital_status','occupation','education','experience','interests']
         extra_kwargs = {'id':{'read_only':True},}
