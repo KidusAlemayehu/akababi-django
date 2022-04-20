@@ -14,6 +14,13 @@ class ListInterest(ListAPIView):
 	permission_classes = (permissions.AllowAny,)
 	serializer_class = InterestSerializer
 
+class ListSocialInterests(ListAPIView):
+    queryset = Interest.objects.filter(type='social')
+    serializer_class = InterestSerializer
+
+class ListWorkInterests(ListAPIView):
+    queryset = Interest.objects.filter(type='work')
+    serializer_class = InterestSerializer
 class AddInterestToUser(CreateAPIView):
 	permission_classes = (permissions.IsAuthenticated,)
 	def post(self, request, id):

@@ -1,6 +1,8 @@
 from rest_framework.generics import CreateAPIView
 from geopy.geocoders import Nominatim
+from accounts.models import User
 from .serializers import LocationSerializer
+from .models import Location
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -8,7 +10,7 @@ import uuid
 
 geolocator = Nominatim(user_agent='akababi')
 class LocationCreateView(CreateAPIView):
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
     serializer_class = LocationSerializer
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
@@ -18,6 +20,9 @@ class LocationCreateView(CreateAPIView):
             print(location.latitude, location.longitude)
             instance.lat = location.latitude
             instance.lng = location.longitude
+            user = User.objects.get(email=request.user)
+            user.address = Location.objects.get(id=instance.id)
+            user.save()
             instance.save()
             return Response({
                 "RequestID":str(uuid.uuid4()),
