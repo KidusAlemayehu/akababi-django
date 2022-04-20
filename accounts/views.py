@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .serializers import LoginSerializer, RegistrationSerializer, UserProfileSerializer
-from rest_framework.generics import GenericAPIView,CreateAPIView, ListAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -35,6 +35,16 @@ class UserProfileView(ListAPIView):
 class UserProfileCreateView(CreateAPIView):
     serializer_class = UserProfileSerializer
     def post(self, request, username):
+        qs = User.objects.get(username=username)
+        serializer = self.get_serializer(qs, data=request.data, many=False)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UserProfileUpdateView(UpdateAPIView):
+    serializer_class = UserProfileSerializer
+    def patch(self, request, username):
         qs = User.objects.get(username=username)
         serializer = self.get_serializer(qs, data=request.data, many=False)
         if serializer.is_valid():

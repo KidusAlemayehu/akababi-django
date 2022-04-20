@@ -41,5 +41,5 @@ class UserProfileSerializer(serializers.ModelSerializer):
     address = LocationSerializer(many=False, read_only=True)
     class Meta:
         model = User
-        fields = ['id','username','address','marital_status','occupation','education','experience','interests']
-        extra_kwargs = {'id':{'read_only':True},'username':{'read_only':True},}
+        fields = ['id','full_name', 'username','email','gender','DOB','address','marital_status','occupation','education','experience','interests']
+        extra_kwargs = {'id':{'read_only':True},'username':{'read_only':True},'full_name':{'read_only':True}, 'email':{'read_only':True}, 'gender':{'read_only':True},'DOB':{'read_only':True}}
