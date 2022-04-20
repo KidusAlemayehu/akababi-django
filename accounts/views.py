@@ -44,10 +44,19 @@ class UserProfileCreateView(CreateAPIView):
 
 class UserProfileUpdateView(UpdateAPIView):
     serializer_class = UserProfileSerializer
+    permission_classes = (permissions.IsAuthenticated,)
     def patch(self, request, username):
-        qs = User.objects.get(username=username)
-        serializer = self.get_serializer(qs, data=request.data, many=False)
+        user = User.objects.get(username=username)
+        current_user = User.objects.get(email=request.user)
+        if user.id != current_user.id:
+            return Response(status=status.HTTP_403_UNAUTHORIZED)
+
+        serializer = self.get_serializer(user, data=request.data, many=False, partial=True)
         if serializer.is_valid():
+            user.education = request.data.get("education", user.education)
+            user.education = request.data.get("education", user.education)
+            user.interests.set = request.data.get("interests", user.interests)
+            user.save()
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
