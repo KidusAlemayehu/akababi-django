@@ -20,7 +20,6 @@ class LocationCreateView(CreateAPIView):
             user.address = Location.objects.get(name=name)
             user.save()
             return Response(status=status.HTTP_201_OK)
-        
         elif serializer.is_valid():
             instance = serializer.save()
             location = geolocator.geocode(instance.name)
