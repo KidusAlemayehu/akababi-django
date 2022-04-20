@@ -38,7 +38,7 @@ class UserProfileCreateView(CreateAPIView):
         user = User.objects.get(username=username)
         serializer = self.get_serializer(user, data=request.data, many=False)
         if serializer.is_valid():
-            user.interests.set(request.data.get("interests"))
+            user.interests.set= request.data.get("interests", user.interests)
             user.save()
             serializer.save()
             return Response(serializer.data)
@@ -57,7 +57,7 @@ class UserProfileUpdateView(UpdateAPIView):
         if serializer.is_valid():
             user.education = request.data.get("education", user.education)
             user.education = request.data.get("education", user.education)
-            user.interests.set(request.data.get("interests"))
+            user.interests.set= request.data.get("interests", user.interests)
             user.save()
             serializer.save()
             return Response(serializer.data)
