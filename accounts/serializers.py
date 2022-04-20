@@ -1,5 +1,5 @@
 from .models import User
-from rest_framework import serializers
+from rest_framework import serializers, fields
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth.hashers import make_password
 from interest.serializers import InterestSerializer
@@ -8,6 +8,7 @@ from location.serializers import LocationSerializer
 
 class RegistrationSerializer(serializers.ModelSerializer):
     password  = serializers.CharField(max_length=250, min_length=6)
+    gender = fields.MultipleChoiceField(choices=[('male', 'Male'),('female', 'Female')], required=True)
     class Meta:
         model = User
         fields = (
