@@ -35,9 +35,11 @@ class UserProfileView(ListAPIView):
 class UserProfileCreateView(CreateAPIView):
     serializer_class = UserProfileSerializer
     def post(self, request, username):
-        qs = User.objects.get(username=username)
-        serializer = self.get_serializer(qs, data=request.data, many=False)
+        user = User.objects.get(username=username)
+        serializer = self.get_serializer(user, data=request.data, many=False)
         if serializer.is_valid():
+            user.interests.set(request.data.get("interests"))
+            user.save()
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
