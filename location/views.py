@@ -14,7 +14,14 @@ class LocationCreateView(CreateAPIView):
     serializer_class = LocationSerializer
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
+        name = request.data.get['name']
+        if Location.objects.get(name=name).exists():
+            user = User.objects.get(email=request.user)
+            user.address = Location.objects.get(name=name)
+            user.save()
+            return Response(status=status.HTTP_201_OK)
+        
+        elif serializer.is_valid():
             instance = serializer.save()
             location = geolocator.geocode(instance.name)
             print(location.latitude, location.longitude)
