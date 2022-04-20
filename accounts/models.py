@@ -10,7 +10,7 @@ class User(AbstractBaseUser):
     username = models.CharField(max_length=25, unique=True, default=None)
     email = models.EmailField(max_length=50, unique=True)
     password = models.CharField(max_length=350)
-    gender = models.CharField(choices=[('Male', 'Male'),('Female', 'Female')], max_length=10)
+    gender = models.CharField(choices=(('Male', 'Male'),('Female', 'Female')), max_length=10)
     DOB = models.DateField()
     address = models.ForeignKey(Location, null=True, blank=True, on_delete=models.SET_NULL)
     marital_status = models.CharField(max_length=20, choices=(('single','Single'),('in relationship','In Relationship'),('engaged','Engaged'),('married','Married')), default='Single')
