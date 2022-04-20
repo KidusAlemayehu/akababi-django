@@ -49,7 +49,7 @@ class UserProfileUpdateView(UpdateAPIView):
         user = User.objects.get(username=username)
         current_user = User.objects.get(email=request.user)
         if user.id != current_user.id:
-            return Response(status=status.HTTP_403_UNAUTHORIZED)
+            return Response({"message":"method not allowed"}, status=status.HTTP_401_UNAUTHORIZED)
 
         serializer = self.get_serializer(user, data=request.data, many=False, partial=True)
         if serializer.is_valid():
