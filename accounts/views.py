@@ -55,7 +55,7 @@ class UserProfileUpdateView(UpdateAPIView):
         if serializer.is_valid():
             user.education = request.data.get("education", user.education)
             user.education = request.data.get("education", user.education)
-            user.interests.set = request.data.get("interests", user.interests)
+            user.interests.set(request.data.get("interests"))
             user.save()
             serializer.save()
             return Response(serializer.data)
