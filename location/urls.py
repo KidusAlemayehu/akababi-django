@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import LocationCreateView
+from .views import UserLocationCreateView
 
 urlpatterns = [
-    path('addlocation/', LocationCreateView.as_view(), name='save_location'),
+    path('addlocation/', UserLocationCreateView.as_view(), name='save_location'),
 ]

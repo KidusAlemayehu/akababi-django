@@ -9,17 +9,17 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 import uuid
 
 geolocator = Nominatim(user_agent='akababi')
-class LocationCreateView(CreateAPIView):
+class UserLocationCreateView(CreateAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = LocationSerializer
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
-        name = request.data.get['name']
-        if Location.objects.get(name=name).exists():
+        name = request.data['name']
+        if Location.objects.filter(name=name).exists():
             user = User.objects.get(email=request.user)
             user.address = Location.objects.get(name=name)
             user.save()
-            return Response(status=status.HTTP_201_OK)
+            return Response(status=201)
         elif serializer.is_valid():
             instance = serializer.save()
             location = geolocator.geocode(instance.name)
