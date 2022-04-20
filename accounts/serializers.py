@@ -8,7 +8,7 @@ from location.serializers import LocationSerializer
 
 class RegistrationSerializer(serializers.ModelSerializer):
     password  = serializers.CharField(max_length=250, min_length=6)
-    gender = serializers.MultipleChoiceField(choices=[('male', 'Male'),('female', 'Female')])
+    gender = serializers.MultipleChoiceField(choices=(("male", "Male"),("female", "Female")))
     class Meta:
         model = User
         fields = (
