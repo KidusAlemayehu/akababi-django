@@ -1,2 +1,3 @@
-venv/
+akababi-venv/
 __pycache__
+migrations
