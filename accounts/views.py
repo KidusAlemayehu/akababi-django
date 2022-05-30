@@ -7,6 +7,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from .models import User
 from location.models import Location
 from location.views import geolocator
+from datetime import date
 import uuid
 
 # Create your views here.
@@ -15,11 +16,15 @@ class SignUpAPIView(CreateAPIView):
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response({
-                "RequestID":str(uuid.uuid4()),
-                "Message":"User Successfully Created",
-                "User":serializer.data}, status=status.HTTP_201_CREATED)
+            bd = request.data.get("DOB")
+            today = date.today()
+            age = today.year - bd.year
+            if age >= 13:
+                serializer.save()
+                return Response({
+                    "RequestID":str(uuid.uuid4()),
+                    "Message":"User Successfully Created",
+                    "User":serializer.data}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LoginAPIView(TokenObtainPairView):
