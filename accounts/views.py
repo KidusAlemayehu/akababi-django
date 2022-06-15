@@ -1,13 +1,17 @@
 from django.shortcuts import render
 from .serializers import LoginSerializer, RegistrationSerializer, UserProfileSerializer
-from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView, DestroyAPIView, GenericAPIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.tokens import RefreshToken
 from .models import User
 from location.models import Location
 from location.views import geolocator
 from datetime import date, datetime
+from django.contrib.sites.shortcuts import get_current_site
+from .utils import Util
+from django.urls import reverse
 import uuid
 
 # Create your views here.
@@ -22,6 +26,14 @@ class SignUpAPIView(CreateAPIView):
             age = today.year - date_bd.year
             if age >= 13:
                 serializer.save()
+                user_data = serializer.data
+                user = User.objects.get(email=user_data['email'])
+                token = RefreshToken.for_user(user).access_token
+                current_site = get_current_site(request).domain
+                relative_uri = reverse('verify_email')
+                url = "http://"+current_site+relative_uri+"?token="+str(token)
+                data = {'email_body':'Hi '+user.username+'please verify your account by using the link below \n'+url, 'to':user.email, 'email_subject':'Verify Your Email'}
+                Util.send_email(data)
                 return Response({
                     "RequestID":str(uuid.uuid4()),
                     "Message":"User Successfully Created",
@@ -29,6 +41,11 @@ class SignUpAPIView(CreateAPIView):
             elif age<13:
                 return Response({"message":"under age"})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UserActivationView(GenericAPIView):
+    def get(self,request):
+        pass
+
 
 class LoginAPIView(TokenObtainPairView):
     permission_classes = (permissions.AllowAny,)
@@ -70,3 +87,6 @@ class UserProfileUpdateView(UpdateAPIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UserProfileDeleteView(DestroyAPIView):
+    pass
